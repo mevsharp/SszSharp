@@ -15,7 +15,9 @@ public class ExecutionPayload
                Timestamp == other.Timestamp && ExtraData.SequenceEqual(other.ExtraData) &&
                BaseFeePerGas.Equals(other.BaseFeePerGas) && BlockHash.SequenceEqual(other.BlockHash) &&
                Transactions.Count == other.Transactions.Count &&
-               Transactions.Zip(other.Transactions).All(p => p.First.SequenceEqual(p.Second));
+               Transactions.Zip(other.Transactions).All(p => p.First.SequenceEqual(p.Second)) &&
+               Withdrawals.Count == other.Withdrawals.Count &&
+               Withdrawals.Zip(other.Withdrawals).All(p => p.First.SequenceEqual(p.Second));
     }
 
     public override bool Equals(object? obj)
@@ -43,6 +45,7 @@ public class ExecutionPayload
         hashCode.Add(BaseFeePerGas);
         hashCode.Add(BlockHash);
         hashCode.Add(Transactions);
+        hashCode.Add(Withdrawals);
         return hashCode.ToHashCode();
     }
 
@@ -74,6 +77,8 @@ public class ExecutionPayload
     public byte[] BlockHash { get; set; }
     [SszElement(13, "List[List[uint8, MAX_BYTES_PER_TRANSACTION], MAX_TRANSACTIONS_PER_PAYLOAD]")]
     public List<byte[]> Transactions { get; set; }
+    [SszElement(14, "List[List[uint8, MAX_WITHDRAWALS_PER_PAYLOAD], MAX_VALIDATORS_PER_WITHDRAWALS_SWEEP]")]
+    public List<byte[]> Withdrawals { get; set; }
 }
 
 public class ExecutionPayloadHeader
@@ -86,7 +91,7 @@ public class ExecutionPayloadHeader
                BlockNumber == other.BlockNumber && GasLimit == other.GasLimit && GasUsed == other.GasUsed &&
                Timestamp == other.Timestamp && ExtraData.SequenceEqual(other.ExtraData) &&
                BaseFeePerGas.Equals(other.BaseFeePerGas) && BlockHash.SequenceEqual(other.BlockHash) &&
-               TransactionsRoot.SequenceEqual(other.TransactionsRoot);
+               TransactionsRoot.SequenceEqual(other.TransactionsRoot) && WithdrawalsRoot.SequenceEqual(other.WithdrawalsRoot);
     }
 
     public override bool Equals(object? obj)
@@ -114,6 +119,7 @@ public class ExecutionPayloadHeader
         hashCode.Add(BaseFeePerGas);
         hashCode.Add(BlockHash);
         hashCode.Add(TransactionsRoot);
+        hashCode.Add(WithdrawalsRoot);
         return hashCode.ToHashCode();
     }
 
@@ -145,4 +151,6 @@ public class ExecutionPayloadHeader
     public byte[] BlockHash { get; set; }
     [SszElement(13, "Vector[uint8, 32]")]
     public byte[] TransactionsRoot { get; set; }
+    [SszElement(14, "Vector[uint8, 32]")]
+    public byte[] WithdrawalsRoot { get; set; }
 }

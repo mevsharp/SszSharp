@@ -29,6 +29,8 @@ public class SizePreset
 
     public static SizePreset MainnetPreset = new(new()
     {
+        {"MAX_WITHDRAWALS_PER_PAYLOAD", 16},
+        {"MAX_VALIDATORS_PER_WITHDRAWALS_SWEEP", 16384},
         {"MAX_BYTES_PER_TRANSACTION", 1073741824},
         {"MAX_TRANSACTIONS_PER_PAYLOAD", 1048576},
         {"BYTES_PER_LOGS_BLOOM", 256},
